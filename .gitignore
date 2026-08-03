@@ -1,0 +1,13 @@
+# Theos
+.theos/
+packages/
+obj/
+.layout/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+*.swp
+*.swo

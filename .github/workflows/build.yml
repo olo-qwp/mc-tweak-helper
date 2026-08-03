@@ -1,0 +1,28 @@
+name: Build DEB
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Theos
+        run: |
+          export THEOS=/tmp/theos
+          echo "THEOS=/tmp/theos" >> $GITHUB_ENV
+          git clone --recursive --depth 1 https://github.com/theos/theos.git $THEOS
+
+      - name: 编译
+        run: make package
+
+      - name: 上传 DEB
+        uses: actions/upload-artifact@v4
+        with:
+          name: mc-tweak-deb
+          path: packages/*.deb
+          retention-days: 30

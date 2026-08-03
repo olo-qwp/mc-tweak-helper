@@ -1,0 +1,21 @@
+#!/bin/bash
+# Minecraft 网易版辅助工具 - 卸载前脚本
+
+echo "[MCTweak] 正在卸载..."
+
+# 杀掉运行中的 Minecraft 进程
+if [ -f "/usr/bin/killall" ]; then
+    if pgrep MinecraftPE > /dev/null 2>&1; then
+        killall -9 MinecraftPE 2>/dev/null || true
+    fi
+    if pgrep "Minecraft" > /dev/null 2>&1; then
+        killall -9 "Minecraft" 2>/dev/null || true
+    fi
+fi
+
+# 清除缓存
+rm -rf /Library/MobileSubstrate/DynamicLibraries/MCTweak.dylib 2>/dev/null || true
+rm -rf /Library/MobileSubstrate/DynamicLibraries/MCTweak.plist 2>/dev/null || true
+
+echo "[MCTweak] 卸载完成"
+exit 0

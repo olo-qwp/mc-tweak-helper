@@ -1,0 +1,25 @@
+#!/bin/bash
+# Minecraft 网易版辅助工具 - 安装后脚本
+
+# 检查是否在使用 TrollStore 的非越狱环境
+if [ ! -f "/usr/bin/uicache" ]; then
+    # TrollStore 环境 - 无需重启
+    echo "[MCTweak] TrollStore 安装完成"
+    exit 0
+fi
+
+# 越狱环境 - 重启 SpringBoard 或相关应用
+if [ -f "/usr/bin/killall" ]; then
+    if pgrep MinecraftPE > /dev/null 2>&1; then
+        killall -9 MinecraftPE 2>/dev/null || true
+    fi
+    if pgrep "Minecraft" > /dev/null 2>&1; then
+        killall -9 "Minecraft" 2>/dev/null || true
+    fi
+fi
+
+# 重置 uicache
+uicache -a 2>/dev/null || true
+
+echo "[MCTweak] 安装完成，请重启 Minecraft 网易版"
+exit 0

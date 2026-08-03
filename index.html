@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft 网易版辅助工具 - 下载</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, sans-serif; background: #0d1117; color: #c9d1d9; padding: 40px 20px; }
+.container { max-width: 800px; margin: 0 auto; }
+h1 { font-size: 28px; margin-bottom: 8px; color: #58a6ff; }
+p { color: #8b949e; margin-bottom: 24px; }
+.card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+.card h2 { font-size: 18px; margin-bottom: 12px; }
+.file-list { list-style: none; }
+.file-list li { padding: 8px 0; border-bottom: 1px solid #21262d; display: flex; align-items: center; gap: 8px; }
+.file-list li:last-child { border-bottom: none; }
+.file-icon { font-size: 18px; }
+.filename { flex: 1; color: #c9d1d9; font-family: monospace; }
+.filesize { color: #8b949e; font-size: 13px; }
+.download-btn { display: inline-block; background: #238636; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-top: 8px; }
+.download-btn:hover { background: #2ea043; }
+.code { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 13px; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; color: #c9d1d9; }
+.badge { background: #1f6feb; color: #fff; font-size: 12px; padding: 2px 10px; border-radius: 12px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⛏ Minecraft 网易版辅助工具</h1>
+  <p>连点器 · 浮动菜单 · TrollStore 兼容 · 版本 1.0.0</p>
+
+  <div class="card" style="text-align:center;">
+    <h2>📦 完整项目下载</h2>
+    <a class="download-btn" href="/mc-tweak.zip" download>⬇ 下载 mc-tweak.zip (13KB)</a>
+    <p style="margin-top:12px;font-size:13px;">包含全部源码 + 构建脚本，解压后运行 <code>bash build.sh</code> 即可产出 .deb</p>
+  </div>
+
+  <div class="card">
+    <h2>📁 项目文件列表</h2>
+    <ul class="file-list">
+      <li><span class="file-icon">📜</span><span class="filename">Makefile</span><span class="filesize">Theos 构建配置</span></li>
+      <li><span class="file-icon">📜</span><span class="filename">control</span><span class="filesize">Deb 包元数据</span></li>
+      <li><span class="file-icon">🅾️</span><span class="filename">Tweak.x</span><span class="filesize">主钩子入口</span></li>
+      <li><span class="file-icon">🅾️</span><span class="filename">MCEventSimulator.h/.m</span><span class="filesize">触摸事件模拟 / 连点器</span></li>
+      <li><span class="file-icon">🅾️</span><span class="filename">MCMenuView.h/.m</span><span class="filesize">浮动菜单 UI</span></li>
+      <li><span class="file-icon">📜</span><span class="filename">build.sh</span><span class="filesize">一键构建脚本</span></li>
+      <li><span class="file-icon">📁</span><span class="filename">layout/DEBIAN/</span><span class="filesize">postinst / prerm / extrainst_</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>📋 安装方式</h2>
+    <div class="code">
+<b>TrollStore 方式:</b>
+  1. 将 .deb 传到 iPhone
+  2. 用 Filza 打开 → 用 TrollStore 安装
+
+<b>TrollFools 注入方式:</b>
+  1. dpkg-deb -x com.mc.tweak_*.deb /tmp/mc
+  2. 取出 Library/MobileSubstrate/DynamicLibraries/MCTweak.dylib
+  3. 用 TrollFools 注入到 Minecraft 网易版 .ipa
+
+<b>越狱方式:</b>
+  dpkg -i com.mc.tweak_*.deb</div>
+  </div>
+</div>
+</body>
+</html>

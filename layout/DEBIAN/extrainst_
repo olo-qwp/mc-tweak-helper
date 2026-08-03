@@ -1,0 +1,6 @@
+#!/bin/bash
+# extrainst_ - 兼容 Cydia/Sileo 的安装后脚本
+# 某些安装器会优先使用 extrainst_ 而不是 postinst
+
+# 直接调用 postinst
+exec /DEBIAN/postinst
