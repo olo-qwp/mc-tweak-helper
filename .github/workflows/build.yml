@@ -17,6 +17,10 @@ jobs:
           xcodebuild -version
           ls /Applications/Xcode*.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/ 2>/dev/null || echo "No iOS SDK found"
 
+      - name: 安装依赖
+        run: |
+          brew install ldid dpkg 2>/dev/null || true
+
       - name: 安装 Theos
         run: |
           export THEOS=/tmp/theos
