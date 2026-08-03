@@ -214,7 +214,7 @@
 - (void)autoClickToggled:(UISwitch *)sender {
     if (sender.isOn) {
         // 在屏幕中心位置开始连点
-        CGPoint center = [UIScreen mainScreen].bounds.center;
+        CGPoint center = CGPointMake(CGRectGetMidX([UIScreen mainScreen].bounds), CGRectGetMidY([UIScreen mainScreen].bounds));
         NSTimeInterval interval = 1.0 / self.speedSlider.value;
         [[MCEventSimulator sharedInstance] startAutoClickAtPoint:center interval:interval];
         self.statusIndicator.backgroundColor = [UIColor systemGreenColor];
@@ -233,7 +233,7 @@
     // 如果正在连点，更新速度
     if (self.autoClickSwitch.isOn) {
         [[MCEventSimulator sharedInstance] stopAutoClick];
-        CGPoint center = [UIScreen mainScreen].bounds.center;
+        CGPoint center = CGPointMake(CGRectGetMidX([UIScreen mainScreen].bounds), CGRectGetMidY([UIScreen mainScreen].bounds));
         NSTimeInterval interval = 1.0 / speed;
         [[MCEventSimulator sharedInstance] startAutoClickAtPoint:center interval:interval];
     }
@@ -330,7 +330,7 @@
 }
 
 - (void)floatingButtonTapped {
-    if (self.menuPanel.isDragging) return;
+    if (self.floatingButton.isDragging) return;
     
     self.menuOpen = !self.menuOpen;
     
