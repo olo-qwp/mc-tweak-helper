@@ -1,3 +1,7 @@
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "MCMenuView.h"
+
 %hook UIApplication
 
 // 在应用启动完成后初始化我们的菜单
