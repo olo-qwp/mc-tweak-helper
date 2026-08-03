@@ -1,6 +1,6 @@
 Package: com.mc.tweak
 Name: Minecraft Helper (网易版)
-Version: 1.0.0
+Version: 1.1.0
 Architecture: iphoneos-arm
 Description: 我的世界网易版辅助工具 - 连点器、自动收集\n支持连点器功能，可调节点击速度(1-30次/秒)，浮动菜单可拖拽，不影响游戏操作。
 Maintainer: McHelper

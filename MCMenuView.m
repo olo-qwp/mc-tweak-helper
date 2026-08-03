@@ -301,9 +301,10 @@
 - (void)createOverlayWindow {
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     
-    // 创建覆盖窗口 - UIWindowLevelAlert + 1 确保在最上层
+    // 创建覆盖窗口 - 使用极高的窗口层级确保在最上层
+    // 注意：UIWindowLevelAlert 已废弃，使用 CGFLOAT_MAX - 1
     self.overlayWindow = [[UIWindow alloc] initWithFrame:screenBounds];
-    self.overlayWindow.windowLevel = UIWindowLevelAlert + 1;
+    self.overlayWindow.windowLevel = 2000000.0;
     self.overlayWindow.backgroundColor = [UIColor clearColor];
     self.overlayWindow.userInteractionEnabled = YES;
     
