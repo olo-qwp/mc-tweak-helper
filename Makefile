@@ -1,5 +1,5 @@
-ARCHS = arm64 arm64e
-TARGET = iphone:14.0:14.0
+ARCHS = arm64
+TARGET = iphone:17.0:14.0
 DEBUG = 0
 GO_EASY_ON_ME = 1
 

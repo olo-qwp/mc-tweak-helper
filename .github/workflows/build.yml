@@ -11,14 +11,30 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
 
+      - name: 检查 Xcode 版本
+        run: |
+          xcode-select -p
+          xcodebuild -version
+          ls /Applications/Xcode*.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/ 2>/dev/null || echo "No iOS SDK found"
+
       - name: 安装 Theos
         run: |
           export THEOS=/tmp/theos
           echo "THEOS=/tmp/theos" >> $GITHUB_ENV
           git clone --recursive --depth 1 https://github.com/theos/theos.git $THEOS
+          echo "Theos installed"
 
       - name: 编译
-        run: make package
+        run: |
+          export THEOS=/tmp/theos
+          make package DEBUG=0
+        env:
+          THEOS: /tmp/theos
+
+      - name: 检查产物
+        run: |
+          ls -la packages/ 2>/dev/null || echo "No packages dir"
+          find . -name "*.deb" 2>/dev/null
 
       - name: 上传 DEB
         uses: actions/upload-artifact@v4
