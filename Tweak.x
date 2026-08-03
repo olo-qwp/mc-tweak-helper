@@ -3,56 +3,44 @@
 #import "MCMenuView.h"
 
 // ============================================================
-// 安全启动：不使用 %ctor（%ctor 在 TrollStore 注入时容易闪退）
-// 改用 +load 方法注册通知，等 app 完全启动后再初始化
+// 纯 Runtime 方案：完全兼容 TrollStore 注入
+//
+// 关键点：
+// 1. 不使用 %hook（%hook 依赖 Cydia Substrate，TrollStore 没有）
+// 2. 不使用 %ctor（%ctor 在 dylib 加载时执行，时机太早）
+// 3. 使用 +load → 通知 → dispatch_after 三级延迟，确保安全
 // ============================================================
 
-%hook UIApplication
-
-// 在应用启动完成后初始化菜单
-// 注意：这个方法是由系统调用的，此时 ObjC 运行时已经完全就绪
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    BOOL result = %orig;
-    
-    // 延迟 3 秒初始化，确保 Minecraft 的 UI 完全加载完毕
-    // 使用弱引用避免循环引用
-    __weak typeof(self) weakSelf = application;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 再次检查 app 是否还在活跃状态
-        if (weakSelf) {
-            [[MCMenuManager sharedInstance] showMenu];
-        }
-    });
-    
-    return result;
-}
-
-%end
-
-// ============================================================
-// 安全初始化类 - 不使用 %ctor
-// 在 dylib 加载时通过 +load 方法注册通知
-// ============================================================
 @interface MCTweakLoader : NSObject
 @end
 
 @implementation MCTweakLoader
 
 + (void)load {
-    // +load 在 dylib 加载时调用，比 %ctor 更安全
-    // 此时不要访问 UIKit，只注册通知
+    // 第一级：+load 在 dylib 加载时由 ObjC 运行时调用
+    // 此时只注册通知，不访问任何 UIKit API
     
     __block id observer = nil;
-    observer = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
-                                                                  object:nil
-                                                                   queue:[NSOperationQueue mainQueue]
-                                                              usingBlock:^(NSNotification * _Nonnull note) {
-        // app 启动完成，现在可以安全访问 UIKit 了
-        // 预创建菜单管理器实例（但不显示）
-        [MCMenuManager sharedInstance];
+    observer = [[NSNotificationCenter defaultCenter] 
+        addObserverForName:UIApplicationDidFinishLaunchingNotification
+                    object:nil
+                     queue:[NSOperationQueue mainQueue]
+                usingBlock:^(NSNotification * _Nonnull note) {
         
-        // 移除通知观察者（只执行一次）
+        // 第二级：UIApplicationDidFinishLaunchingNotification 触发时
+        // app 已经启动完成，UIKit 安全可用
+        
+        // 移除一次性观察者
         [[NSNotificationCenter defaultCenter] removeObserver:observer];
+        
+        // 第三级：再延迟 5 秒，确保 Minecraft 游戏 UI 完全加载
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 
+                       (int64_t)(5.0 * NSEC_PER_SEC)), 
+                       dispatch_get_main_queue(), ^{
+            
+            // 最终安全启动菜单
+            [[MCMenuManager sharedInstance] showMenu];
+        });
     }];
 }
 

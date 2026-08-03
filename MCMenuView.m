@@ -292,17 +292,22 @@
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
-        [self createOverlayWindow];
-    }
+    // 延迟创建窗口：只在 showMenu 时创建，不在 init 时创建
+    // 避免在 app 启动过程中访问 UIKit API
     return self;
 }
 
-- (void)createOverlayWindow {
+- (void)ensureOverlayWindow {
+    if (self.overlayWindow) return;
+    
+    // 安全检查：确保主屏幕可用
+    if (![UIScreen mainScreen]) {
+        return;
+    }
+    
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     
     // 创建覆盖窗口 - 使用极高的窗口层级确保在最上层
-    // 注意：UIWindowLevelAlert 已废弃，使用 CGFLOAT_MAX - 1
     self.overlayWindow = [[UIWindow alloc] initWithFrame:screenBounds];
     self.overlayWindow.windowLevel = 2000000.0;
     self.overlayWindow.backgroundColor = [UIColor clearColor];
@@ -331,6 +336,8 @@
 }
 
 - (void)floatingButtonTapped {
+    // 安全检查
+    if (!self.floatingButton || !self.menuPanel) return;
     if (self.floatingButton.isDragging) return;
     
     self.menuOpen = !self.menuOpen;
@@ -354,6 +361,13 @@
 
 - (void)showMenu {
     if (self.visible) return;
+    
+    // 确保窗口已创建（延迟创建）
+    [self ensureOverlayWindow];
+    
+    // 如果窗口创建失败，不继续
+    if (!self.overlayWindow) return;
+    
     self.visible = YES;
     self.overlayWindow.hidden = NO;
     

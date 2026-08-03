@@ -80,26 +80,25 @@ typedef void *(*GSEventCreateWithTypeAndLocationType)(int type, CGPoint location
 #pragma mark - 单次触摸
 
 - (void)simulateTouchDownAtPoint:(CGPoint)point {
-    if (self.GSEventCreateWithTypeAndLocation && self.GSEventSend) {
-        void *event = self.GSEventCreateWithTypeAndLocation(kGSEventTouchBegan, point);
-        if (event) {
-            self.GSEventSend(event);
-            free(event);
-        }
+    if (!self.GSEventCreateWithTypeAndLocation || !self.GSEventSend) return;
+    void *event = self.GSEventCreateWithTypeAndLocation(kGSEventTouchBegan, point);
+    if (event) {
+        self.GSEventSend(event);
+        free(event);
     }
 }
 
 - (void)simulateTouchUpAtPoint:(CGPoint)point {
-    if (self.GSEventCreateWithTypeAndLocation && self.GSEventSend) {
-        void *event = self.GSEventCreateWithTypeAndLocation(kGSEventTouchEnded, point);
-        if (event) {
-            self.GSEventSend(event);
-            free(event);
-        }
+    if (!self.GSEventCreateWithTypeAndLocation || !self.GSEventSend) return;
+    void *event = self.GSEventCreateWithTypeAndLocation(kGSEventTouchEnded, point);
+    if (event) {
+        self.GSEventSend(event);
+        free(event);
     }
 }
 
 - (void)simulateTapAtPoint:(CGPoint)point {
+    if (!self.GSEventCreateWithTypeAndLocation || !self.GSEventSend) return;
     // 按下并立即抬起
     [self simulateTouchDownAtPoint:point];
     usleep(50000); // 50ms 延迟

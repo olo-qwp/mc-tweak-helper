@@ -10,6 +10,7 @@ TWEAK_NAME = MCTweak
 MCTweak_FILES = Tweak.x MCMenuView.m MCEventSimulator.m
 MCTweak_CFLAGS = -fobjc-arc -O2
 MCTweak_FRAMEWORKS = UIKit CoreGraphics QuartzCore
+MCTweak_NO_LIBSUBSTRATE = 1
 
 # 自动注入到 Minecraft 网易版
 MCTweak_CFLAGS += -DMC_PACKAGE_NAME=\"com.netease.mc\" -DMC_DISPLAY_NAME=\"Minecraft\"
